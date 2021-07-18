@@ -1,0 +1,63 @@
+- dotnet CLI   => https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet
+	donet --info	=> To get information about the available commands and the environment
+	dotnet -h	=>  Shows more detailed documentation online for the specified command
+	dotnet new --list	=> Lists available templates to be run using dotnet new
+	dotnet sln	=> to add Project created to sln
+	dotnet run  => to run application
+	dotnet dev-certs https --trust  => to make sure our browser trust the certificate that is provided with dot net SDk
+	dotnet ef migrations add [MigrationName] -o [FolderName] => to create migrations
+- Extensions 
+	- C#
+	- C# Extensions
+	- NuGet Gallery
+	- 
+- create solution api
+	- dotnet new sln => create solution file that is container of our projectt
+	- dotnet new webapi -o 'APIProjectName' => create a API folder that has api project, 'o' for new folder
+	- dotnet sln add API => to add API project created to sln
+	- cd API => change directory to API project
+	- dotnet run => to run API project
+	- dotnet dev-certs https --trust => to make sure our browser trust the certificate that is provided with dot net SDk
+
+- Entity Framework
+	- what is Object Relational Mapper (ORM)
+		- Object Relational Mapper => Translates our code into SQL commands that update our tables in the database
+		- Entity Framework Features
+			- Querying => allows to query our db using linq queries  
+			- Change Traking => keep track of changes occurring in our entities which need to be submitted to db 
+			- Saving => allows us to save the db and ef will execute insert, update and delete commands
+			- Concurrency => it uses optimistic concurrency by default to protect overwriting changes made by another user 
+			- Transactions => it provides automatic transaction management whilst querying or saving data
+			- Caching => it also includes first level caching out of the box, so seperated querying will return data from the cach instead of hitting the db
+			- Built-in conventions => like Id property name
+			- Configurations => we can configure our entities and there's ways to configure these so that we can override the conventions
+			- Migrations => ability to create db schema so that when we start our application or we run a particular command, we can automatically generate our db in our db server   
+	- adding Entity Framework
+		- Install NuGet Gallery Extensions
+			- Install Microsoft.EntityFrameworkCore.Sqlite
+			- Install Microsoft.EntityFrameworkCore.Design
+		- Add Data Folder which have DataContext class and inherit from DbContext
+		- configure in Startup class in ConfigureServices =>  
+			services.AddDbContext<DataContext>(options =>
+            {
+                options.UseSqlite("Connection String");
+            });
+		- Add Connection String 
+			- In appsettings.Development.json 
+				"ConnectionStrings":{
+					"DefaultConnection":"Data source=datingapp.db"
+				}
+			- In Startup.cs 
+				services.AddDbContext<DataContext>(options =>
+				{
+					options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
+				});
+		- Create Database
+			- go to https://www.nuget.org/ and search for dotnet-ef
+			- install dotnet-ef that matches the version of Entity Framework that installed earlier
+		- Creating Migrations
+			- dotnet ef migrations add InitialCreate -o Data/Migrations
+- Notes
+	- appsettings.Development.json => use where we can store things that we don't mind other people seeing like ConnectionString doesn't contain any password information
+	- appsettings.json => for developing our application 
+	- Migrations Folder should be with name 'Migrations'
