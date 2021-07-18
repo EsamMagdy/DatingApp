@@ -10,7 +10,7 @@
 	- C#
 	- C# Extensions
 	- NuGet Gallery
-	- 
+	- SQLite
 - create solution api
 	- dotnet new sln => create solution file that is container of our projectt
 	- dotnet new webapi -o 'APIProjectName' => create a API folder that has api project, 'o' for new folder
@@ -57,6 +57,9 @@
 			- install dotnet-ef that matches the version of Entity Framework that installed earlier
 		- Creating Migrations
 			- dotnet ef migrations add InitialCreate -o Data/Migrations
+			- dotnet  ef database update
+	- adding custom API
+		- 
 - Notes
 	- appsettings.Development.json => use where we can store things that we don't mind other people seeing like ConnectionString doesn't contain any password information
 	- appsettings.json => for developing our application 
