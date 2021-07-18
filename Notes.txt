@@ -6,6 +6,10 @@
 	dotnet run  => to run application
 	dotnet dev-certs https --trust  => to make sure our browser trust the certificate that is provided with dot net SDk
 	dotnet ef migrations add [MigrationName] -o [FolderName] => to create migrations
+- git commands	
+	- git status => check if git is installed on this project or not
+	- git init => intialize a repository in our project folder
+	- 
 - Extensions 
 	- C#
 	- C# Extensions
@@ -59,8 +63,20 @@
 			- dotnet ef migrations add InitialCreate -o Data/Migrations
 			- dotnet  ef database update
 	- adding custom API
-		- 
+		- in API folder => create class that inherit from ControllerBase
+		- add these attributes [ApiController] & [Route("api/[controller]")] on the controller
+		- inject DataContext in Custom Contoller Constructor
 - Notes
 	- appsettings.Development.json => use where we can store things that we don't mind other people seeing like ConnectionString doesn't contain any password information
 	- appsettings.json => for developing our application 
 	- Migrations Folder should be with name 'Migrations'
+	- it's recommended to use Asynchronous code when dealing with database
+	- Saving code into source control
+		- Install git	https://git-scm.com/
+		- git init
+		- dotnet new gitignore	=> ignore folders like bin and obj that is regenerated automatically when run project
+		- exclude appsetting.json => in .gitignore => write => appsetting.json
+		- create repository
+		- in project terminal
+			- git remote add origin https://github.com//
+			- git push -u origin master

@@ -3,7 +3,6 @@ using System.Linq;
 using API.Data;
 using API.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -22,8 +21,9 @@ namespace API.Controllers
         {
             return _context.Users.ToList();
         }
-        [HttpGet]
-        [Route("{id}")]
+        [HttpGet("{id}")]
+        // [HttpGet]
+        // [Route("{id}")]
         public ActionResult<AppUser> GetUser(int id)
         {
             return _context.Users.Find(id);
