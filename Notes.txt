@@ -65,7 +65,7 @@
 			- install dotnet-ef that matches the version of Entity Framework that installed earlier
 		- Creating Migrations
 			- dotnet ef migrations add InitialCreate -o Data/Migrations
-			- dotnet  ef database update
+			- dotnet ef database update
 
 - Adding custom API
 	- in API folder => create class that inherit from ControllerBase
@@ -92,6 +92,8 @@
 												"ssl": true
 											},
 		- In Startup.cs => Configure => app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200")); 
+	- Authentication
+		- Safe Storage Password
 - Notes
 	- appsettings.Development.json => use where we can store things that we don't mind other people seeing like ConnectionString doesn't contain any password information
 	- appsettings.json => for developing our application 
