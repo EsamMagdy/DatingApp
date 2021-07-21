@@ -55,3 +55,10 @@ G:\Self Project\DatingApp\api\bin\Debug\net5.0\runtimes\win-arm\native\e_sqlite3
 G:\Self Project\DatingApp\api\bin\Debug\net5.0\runtimes\win-arm64\native\e_sqlite3.dll
 G:\Self Project\DatingApp\api\bin\Debug\net5.0\runtimes\win-x64\native\e_sqlite3.dll
 G:\Self Project\DatingApp\api\bin\Debug\net5.0\runtimes\win-x86\native\e_sqlite3.dll
+G:\Self Project\DatingApp\api\bin\Debug\net5.0\Microsoft.IdentityModel.JsonWebTokens.dll
+G:\Self Project\DatingApp\api\bin\Debug\net5.0\Microsoft.IdentityModel.Logging.dll
+G:\Self Project\DatingApp\api\bin\Debug\net5.0\Microsoft.IdentityModel.Tokens.dll
+G:\Self Project\DatingApp\api\bin\Debug\net5.0\System.IdentityModel.Tokens.Jwt.dll
+G:\Self Project\DatingApp\api\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+G:\Self Project\DatingApp\api\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.dll
+G:\Self Project\DatingApp\api\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll

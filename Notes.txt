@@ -6,6 +6,8 @@
 	dotnet run  => to run application
 	dotnet dev-certs https --trust  => to make sure our browser trust the certificate that is provided with dot net SDk
 	dotnet ef migrations add [MigrationName] -o [FolderName] => to create migrations
+	dotnet ef database update => to track or update on database
+	dotnet ef database drop	=> to clear database	=> then write a command dotnet ef database update
 - git commands	
 	- git status => check if git is installed on this project or not
 	- git init => intialize a repository in our project folder
@@ -94,6 +96,49 @@
 		- In Startup.cs => Configure => app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200")); 
 	- Authentication
 		- Safe Storage Password
+			- store password in clear text
+			- hashing password, apply hashing algorithm 
+			- password salt
+		- JWT
+			- Intro => https://jwt.io/introduction
+			- Adding
+				- Create ITokenService interface & TokenService class that implement ITokenService
+				- Nuget => System.IdentityModel.Tokens.Jwt
+				- in TokenService.cs
+				- create UserDto.cs that return Username & Token
+				- add TokenKey in appsetting.Development.json => should be is 16 or 32 character & random string 
+			- Adding Authentication middleware [Authorize]
+				- Nuget => Microsoft.AspNetCore.Authentication.JwtBearer
+				- Startup.cs
+					- ConfigureServices	=> services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+												.AddJwtBearer(options =>
+												{
+													options.TokenValidationParameters = new TokenValidationParameters
+													{
+														ValidateIssuerSigningKey = true,
+														IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"])),
+														ValidateIssuer = false,
+														ValidateAudience = false
+													};
+												});
+					- Configure
+						-  app.UseAuthentication(); // should be after app.UseCors() and before app.UseAuthorization()
+
+- Add Validation
+	- to database => not prefer
+	- to entity => not prefer
+	- to DTO => it's prefer
+
+- Debugger
+	- in .vscode folder	
+		- launch.json => we have two options for debugger, if we don't have launch.json file => Ctrl+Shift+P => Generate Asstes for Build and Debug
+			- .NET Core Launch (web) => launch if our application was not already starting 
+			- .NET Core Attach => launch to an already running process and this often times use
+		- Press Ctrl+Shift+D => .NET Core Attach
+- Using Data Transfer Object (DTOs)
+	- when send an object from the body like { 'username':'Esam', 'password': '1234'} and method signature (string username, string password) => there is an error 
+	- using when passing data in body
+	- it's not prefer to return Entity like AppUser with password instead return DTOs
 - Notes
 	- appsettings.Development.json => use where we can store things that we don't mind other people seeing like ConnectionString doesn't contain any password information
 	- appsettings.json => for developing our application 
@@ -116,3 +161,12 @@
 			if JQuery is the thing thats manipulating the DOM, then angular change detection won't work
 			So if you're using something in JQuery, you're mixing it with angular code, then you may run into problems doing this
 			So don't use JQuery, use something more angular
+	- [ApiController] benefits are
+		- when pass parameter to action we don't need to specify the parameter 
+			Register([FromBody]string username) or Register([FromQuery]string username)
+		- It automatically validates the parameters that we pass up to an API endpoint based on the validation  
+	- When we create service like TokenService that implement ITokenService, we want to add it into our depedency injection and select it's lifetime (how long should this service be alive for after we start it) in Startup.cs => ConfigureServices
+		service.AddScoped<ITokenService, TokenService>();		=> scoped to the lifetime of the HTTP request in this case and it prefer to use with HTTP request
+		service.AddSingleton<ITokenService, TokenService>();	=> doesn't stop untill our application stops so it continue to use resources and not prefer to use with HTTP request
+		service.AddTransient<ITokenService, TokenService>();	=> service is going to created and destroyed as soon as the method is finished and not prefer to use with HTTP request
+	- Extensions Methods => Enable us to add methods existing types without creating a new derived type or modifying the original type 
