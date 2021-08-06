@@ -1,3 +1,9 @@
+create New Project
+	- mkdir DatingApp
+	- cd DatingApp
+	- dotnet new sln
+	- dotnet new webapi -o API
+	- dotnet sln add API
 - dotnet CLI   => https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet
 	donet --info	=> To get information about the available commands and the environment
 	dotnet -h	=>  Shows more detailed documentation online for the specified command
@@ -5,9 +11,11 @@
 	dotnet sln	=> to add Project created to sln
 	dotnet run  => to run application
 	dotnet dev-certs https --trust  => to make sure our browser trust the certificate that is provided with dot net SDk
+	// for database
 	dotnet ef migrations add [MigrationName] -o [FolderName] => to create migrations
 	dotnet ef database update => to track or update on database
 	dotnet ef database drop	=> to clear database	=> then write a command dotnet ef database update
+	dotnet ef dbcontext scaffold "Server=.;Database=Pluto;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -o Entities	=> convert database first to code first
 - git commands	
 	- git status => check if git is installed on this project or not
 	- git init => intialize a repository in our project folder
@@ -44,18 +52,18 @@
 			- Migrations => ability to create db schema so that when we start our application or we run a particular command, we can automatically generate our db in our db server   
 	- adding Entity Framework
 		- Install NuGet Gallery Extensions
-			- Install Microsoft.EntityFrameworkCore.Sqlite
+			- Install Microsoft.EntityFrameworkCore.SqlServer Or Microsoft.EntityFrameworkCore.Sqlite
 			- Install Microsoft.EntityFrameworkCore.Design
 		- Add Data Folder which have DataContext class and inherit from DbContext
 		- configure in Startup class in ConfigureServices =>  
 			services.AddDbContext<DataContext>(options =>
             {
-                options.UseSqlite("Connection String");
+                 options.UseSqlServer(_config.GetConnectionString("DefaultConnection")); // or => options.UseSqlite("Connection String");
             });
 		- Add Connection String 
 			- In appsettings.Development.json 
 				"ConnectionStrings":{
-					"DefaultConnection":"Data source=datingapp.db"
+					 "DefaultConnection":"server=localhost; database=OHS; Trusted_Connection=True;" // or for Sqlite "DefaultConnection":"Data source=datingapp.db"
 				}
 			- In Startup.cs 
 				services.AddDbContext<DataContext>(options =>
@@ -123,7 +131,17 @@
 												});
 					- Configure
 						-  app.UseAuthentication(); // should be after app.UseCors() and before app.UseAuthorization()
-
+- Add AutoMapper
+	- Install AutoMapper.Extensions.Microsoft.DependencyInjection
+	- Create Helpers Folder that has AutoMapperProfile : Profile
+		public class AutoMapperProfile : Profile
+		{
+			public AutoMapperProfile()
+			{
+			}
+		}
+	- In Startup.cs => ConfigureServices
+		services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 - Add Validation
 	- to database => not prefer
 	- to entity => not prefer
@@ -135,10 +153,28 @@
 			- .NET Core Launch (web) => launch if our application was not already starting 
 			- .NET Core Attach => launch to an already running process and this often times use
 		- Press Ctrl+Shift+D => .NET Core Attach
+
 - Using Data Transfer Object (DTOs)
 	- when send an object from the body like { 'username':'Esam', 'password': '1234'} and method signature (string username, string password) => there is an error 
 	- using when passing data in body
 	- it's not prefer to return Entity like AppUser with password instead return DTOs
+
+- Adding Identity
+	- Install Microsoft.AspNetCore.Identity.EntityFrameworkCore
+	- Adding AppUser : IdentityUser
+	- Adding AppRole : IdentityRole
+	- Adding AppUserRole
+	- make DataContext : IdentityDbContext
+	- In Startup.cs => ConfigureServices =>
+		 services.AddIdentityCore<AppUser>(opt =>
+            {
+                opt.Password.RequireNonAlphanumeric = false;
+            })
+            .AddRoles<AppRole>()
+            .AddRoleManager<RoleManager<AppRole>>()
+            .AddSignInManager<SignInManager<AppUser>>()
+            .AddEntityFrameworkStores<DataContext>();
+
 - Notes
 	- appsettings.Development.json => use where we can store things that we don't mind other people seeing like ConnectionString doesn't contain any password information
 	- appsettings.json => for developing our application 
@@ -169,4 +205,5 @@
 		service.AddScoped<ITokenService, TokenService>();		=> scoped to the lifetime of the HTTP request in this case and it prefer to use with HTTP request
 		service.AddSingleton<ITokenService, TokenService>();	=> doesn't stop untill our application stops so it continue to use resources and not prefer to use with HTTP request
 		service.AddTransient<ITokenService, TokenService>();	=> service is going to created and destroyed as soon as the method is finished and not prefer to use with HTTP request
-	- Extensions Methods => Enable us to add methods existing types without creating a new derived type or modifying the original type 
+	- Extensions Methods => Enable us to add methods existing types without creating a new derived type or modifying the original type
+		- adding more coding in Configure Service in Extensions Methods => Interface => ApplicationServiceExtensions & IdentityServiceExtensions
