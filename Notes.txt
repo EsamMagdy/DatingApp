@@ -16,6 +16,8 @@ create New Project
 	dotnet ef database update => to track or update on database
 	dotnet ef database drop	=> to clear database	=> then write a command dotnet ef database update
 	dotnet ef dbcontext scaffold "Server=.;Database=Pluto;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -o Entities	=> convert database first to code first
+	dotnet tool install --global dotnet-ef => for install dotnet ef 
+
 - git commands	
 	- git status => check if git is installed on this project or not
 	- git init => intialize a repository in our project folder
